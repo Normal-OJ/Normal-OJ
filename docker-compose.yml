@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  caddy:
+    image: abiosoft/caddy
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+    ports:
+      - 8080:8080
+
+  web:
+    build: ./Back-End
+    # restart: always
+    volumes:
+      - ./Back-End:/code
+    env_file:
+      - ./Back-End/flask.env
+
+  mongo:
+    image: mongo
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081

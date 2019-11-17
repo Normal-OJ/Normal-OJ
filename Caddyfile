@@ -1,0 +1,6 @@
+localhost:8080 {
+	proxy /api web:8081 {
+		transparent
+		without /api
+	}
+}
