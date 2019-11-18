@@ -8,6 +8,8 @@ services:
       - ./Caddyfile:/etc/Caddyfile
     ports:
       - 8080:8080
+      - 80:80
+      - 443:443
 
   web:
     build: ./Back-End
