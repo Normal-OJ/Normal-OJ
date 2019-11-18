@@ -1,6 +1,10 @@
-localhost:8080, 140.122.184.7:8080 {
-	proxy /api web:8081 {
+localhost:8080, www.noj.tw, noj.tw {
+	proxy /api web:8080 {
 		transparent
 		without /api
 	}
+}
+
+mongo.noj.tw {
+	proxy / mongo-express:8081
 }
