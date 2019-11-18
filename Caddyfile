@@ -1,10 +1,4 @@
-localhost:8080 {
-	proxy /api web:8081 {
-		transparent
-		without /api
-	}
-}
-140.122.184.7:8080 {
+localhost:8080, 140.122.184.7:8080 {
 	proxy /api web:8081 {
 		transparent
 		without /api
