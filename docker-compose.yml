@@ -31,4 +31,3 @@ services:
       - ./Back-End:/code
     env_file:
       - ./Back-End/flask.env
-      - 8081:8081
