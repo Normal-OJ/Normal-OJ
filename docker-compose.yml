@@ -11,14 +11,6 @@ services:
       # - 80:80
       # - 443:443
 
-  web:
-    build: ./Back-End
-    # restart: always
-    volumes:
-      - ./Back-End:/code
-    env_file:
-      - ./Back-End/flask.env
-
   mongo:
     image: mongo
     restart: always
@@ -27,4 +19,16 @@ services:
     image: mongo-express
     restart: always
     ports:
+      - 8081:8081
+
+  vue:
+    build: ./Front-End
+
+  web:
+    build: ./Back-End
+    # restart: always
+    volumes:
+      - ./Back-End:/code
+    env_file:
+      - ./Back-End/flask.env
       - 8081:8081
