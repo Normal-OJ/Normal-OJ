@@ -7,9 +7,10 @@ services:
     volumes:
       - ./Caddyfile:/etc/Caddyfile
     ports:
-      - 8080:8080
-      # - 80:80
-      # - 443:443
+      - "8080:8080"
+      - "8081:8081"
+      - "80:80"
+      - "443:443"
 
   mongo:
     image: mongo
@@ -18,15 +19,13 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
-    ports:
-      - 8081:8081
 
   vue:
     build: ./Front-End
 
   web:
     build: ./Back-End
-    # restart: always
+    restart: always
     volumes:
       - ./Back-End:/code
     env_file:
