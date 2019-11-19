@@ -23,6 +23,10 @@ http://noj.tw {
  	}
 }
 
+http://www.noj.tw {
+	redir http://noj.tw{uri}
+}
+
 http://mongo.noj.tw {
  	tls admin@noj.tw
 	proxy / mongo-express:8081
