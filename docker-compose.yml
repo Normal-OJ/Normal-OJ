@@ -11,6 +11,8 @@ services:
       - "8081:8081"
       - "80:80"
       - "443:443"
+    env_file:
+      - ./caddy.env
 
   mongo:
     image: mongo
