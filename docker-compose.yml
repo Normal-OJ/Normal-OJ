@@ -6,13 +6,14 @@ services:
     image: abiosoft/caddy
     volumes:
       - ./Caddyfile:/etc/Caddyfile
+      - ./.caddy:/root/.caddy
     ports:
       - "8080:8080"
       - "8081:8081"
       - "80:80"
       - "443:443"
-    env_file:
-      - ./caddy.env
+    environment:
+      - ACME_AGREE=true
 
   mongo:
     image: mongo
@@ -21,6 +22,8 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
+    env_file:
+      - ./mongo-express.env
 
   vue:
     build: ./Front-End

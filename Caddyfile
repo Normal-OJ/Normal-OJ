@@ -12,7 +12,7 @@ localhost:8081 {
 	proxy / mongo-express:8081
 }
 
-noj.tw {
+http://noj.tw {
  	tls admin@noj.tw
 	proxy / vue:8080 {
 		transparent
@@ -23,7 +23,7 @@ noj.tw {
  	}
 }
 
-mongo.noj.tw {
+http://mongo.noj.tw {
  	tls admin@noj.tw
 	proxy / mongo-express:8081
 }
