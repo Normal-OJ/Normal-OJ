@@ -3,6 +3,7 @@
 ## Clone
 
 `git clone --recurse-submodules https://github.com/Normal-OJ/Normal-OJ.git`
+
 `git submodule foreach --recursive git checkout master`
 
 ## Run Docker
