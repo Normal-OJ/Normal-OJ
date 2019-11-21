@@ -5,7 +5,7 @@ services:
   caddy:
     image: abiosoft/caddy
     volumes:
-      - ./Caddyfile:/etc/Caddyfile
+      - ./.config/Caddyfile:/etc/Caddyfile
       - ./.caddy:/root/.caddy
     ports:
       - "8080:8080"
@@ -23,15 +23,15 @@ services:
     image: mongo-express
     restart: always
     env_file:
-      - ./mongo-express.env
+      - ./.config/mongo-express.env
 
   vue:
     build: ./Front-End
 
   web:
     build: ./Back-End
-    restart: always
+    # restart: always
     volumes:
       - ./Back-End:/code
     env_file:
-      - ./Back-End/flask.env
+      - ./.config/flask.env
