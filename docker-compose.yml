@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
 
@@ -8,10 +8,8 @@ services:
       - ./.config/Caddyfile:/etc/Caddyfile
       - ./.caddy:/root/.caddy
     ports:
-      - "8080:8080"
-      - "8081:8081"
-      - "80:80"
-      - "443:443"
+      - "${HTTPS_PORT:-8080}:${HTTPS_PORT:-8080}"
+      - "${HTTP_PORT:-8081}:${HTTP_PORT:-8081}"
     environment:
       - ACME_AGREE=true
 
