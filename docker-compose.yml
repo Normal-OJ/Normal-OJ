@@ -25,6 +25,8 @@ services:
 
   vue:
     build: ./Front-End
+    volumes:
+      - ./Front-End:/app
 
   web:
     build: ./Back-End
