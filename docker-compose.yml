@@ -27,6 +27,7 @@ services:
     build: ./Front-End
     volumes:
       - ./Front-End:/app
+      - /app/node_modules
 
   web:
     build: ./Back-End
