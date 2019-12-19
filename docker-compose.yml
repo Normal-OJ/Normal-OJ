@@ -16,6 +16,8 @@ services:
   mongo:
     image: mongo
     restart: always
+    volumes:
+      - ./MongoDB:/data/db
 
   mongo-express:
     image: mongo-express
