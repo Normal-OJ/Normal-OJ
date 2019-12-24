@@ -29,7 +29,7 @@ services:
     build: ./Front-End
     volumes:
       - ./Front-End:/app
-      - /app/node_modules
+      - /app/node_modules  
 
   web:
     build: ./Back-End
@@ -38,3 +38,10 @@ services:
       - ./Back-End:/code
     env_file:
       - ./.config/flask.env
+
+  sandbox:
+    build: ./Sandbox
+    volumes:
+      - ./Sandbox:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+
