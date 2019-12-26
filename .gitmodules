@@ -1,9 +1,9 @@
 [submodule "Back-End"]
 	path = Back-End
-	url = git@github.com:Normal-OJ/Back-End.git
+	url = https://github.com/Normal-OJ/Back-End.git
 [submodule "Sandbox"]
 	path = Sandbox
-	url = git@github.com:Normal-OJ/Sandbox.git
+	url = https://github.com/Normal-OJ/Sandbox.git
 [submodule "Front-End"]
 	path = Front-End
-	url = git@github.com:Normal-OJ/Front-End.git
+	url = https://github.com/Normal-OJ/Front-End.git
