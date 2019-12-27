@@ -4,40 +4,25 @@ services:
 
   caddy:
     image: abiosoft/caddy
-    volumes:
-      - ./.config/Caddyfile:/etc/Caddyfile
-      - ./.caddy:/root/.caddy
-    ports:
-      - "${HTTPS_PORT:-8080}:${HTTPS_PORT:-8080}"
-      - "${HTTP_PORT:-8081}:${HTTP_PORT:-8081}"
     environment:
       - ACME_AGREE=true
 
   mongo:
     image: mongo
-    restart: always
     volumes:
       - ./MongoDB:/data/db
 
   mongo-express:
     image: mongo-express
     restart: always
-    env_file:
-      - ./.config/mongo-express.env
 
   vue:
     build: ./Front-End
-    volumes:
-      - ./Front-End:/app
-      - /app/node_modules  
 
   web:
     build: ./Back-End
-    # restart: always
-    volumes:
-      - ./Back-End:/code
-    env_file:
-      - ./.config/flask.env
+    environment:
+      - MONGO_HOST=mongo
 
   # sandbox:
   #   build: ./Sandbox

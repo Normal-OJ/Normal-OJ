@@ -1,8 +1,14 @@
+# Docker-compose for production
+docker-compose.prod.yml
+
 # Environment Variable files
 .config
 
 # Caddy
 .caddy
+
+# Deploy
+deploy.sh
 
 # MongoDB
 MongoDB
