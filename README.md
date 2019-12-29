@@ -44,3 +44,12 @@ or if you want to rebuild the images
 #### Down
 
 `docker-compose down`
+
+## Setup
+
+### Sandbox
+
+1. in `.config/submission.json`:
+  - set `working_dir` to your desired location
+2. cd to `Sandbox` folder, run `./build.sh`, this will build the images you need to compile and execute user's submission
+3. that's all :P, i think
