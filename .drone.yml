@@ -12,10 +12,4 @@ server:
 steps:
 - name: greeting
   commands:
-  - echo "hello world!" > hi.txt
-
-trigger:
-  branch:
-  - master
-  event:
-  - push
+  - echo "Hello World!" > hi.txt
