@@ -1,0 +1,14 @@
+localhost:8080 {
+	proxy / vue:8080 {
+		websocket
+		transparent
+	}
+	proxy /api web:8080 {
+		transparent
+		without /api
+	}
+}
+
+localhost:8081 {
+	proxy / mongo-express:8081
+}

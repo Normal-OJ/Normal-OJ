@@ -1,9 +1,6 @@
 # Docker-compose for production
 docker-compose.prod.yml
 
-# Environment Variable files
-.config
-
 # Caddy
 .caddy
 
@@ -18,3 +15,6 @@ MongoDB
 
 # VS Code
 .vscode
+
+# For production
+*.prod
