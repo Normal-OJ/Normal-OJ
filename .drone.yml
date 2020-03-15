@@ -1,0 +1,21 @@
+---
+kind: pipeline
+type: ssh
+name: default
+
+server:
+  host: noj.tw
+  user: development
+  ssh_key:
+    from_secret: ssh_key
+
+steps:
+- name: greeting
+  commands:
+  - echo "hello world!" > hi.txt
+
+trigger:
+  branch:
+  - master
+  event:
+  - push
