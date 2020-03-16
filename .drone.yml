@@ -10,6 +10,15 @@ server:
     from_secret: ssh_key
 
 steps:
-- name: greeting
+- name: test
   commands:
-  - echo "Hello World!" > hi.txt
+  - echo "testing..."
+
+- name: New Master
+  commands:
+  - echo "Master!"
+  when:
+    event:
+    - push
+    branch:
+    - master
