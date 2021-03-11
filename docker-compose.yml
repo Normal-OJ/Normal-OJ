@@ -1,11 +1,8 @@
-version: '3'
+version: "3"
 
 services:
-
   caddy:
-    image: abiosoft/caddy
-    environment:
-      - ACME_AGREE=true
+    image: caddy
 
   mongo:
     image: mongo
@@ -29,4 +26,3 @@ services:
     volumes:
       - ./Sandbox:/app
       - /var/run/docker.sock:/var/run/docker.sock
-
