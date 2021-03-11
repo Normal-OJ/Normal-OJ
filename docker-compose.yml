@@ -17,7 +17,9 @@ services:
     build: ./Front-End
 
   web:
-    build: ./Back-End
+    build:
+      context: ./Back-End
+      dockerfile: Dockerfile.dev
     environment:
       - MONGO_HOST=mongo
 
