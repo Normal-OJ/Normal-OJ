@@ -1,12 +1,10 @@
 {
-	debug
 	auto_https disable_redirects
 }
 
 :8080 {
 	log {
 		output stdout
-		level DEBUG
 	}
 	@vue {
 		not {
