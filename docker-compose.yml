@@ -2,16 +2,15 @@ version: "3"
 
 services:
   caddy:
-    image: caddy
+    image: caddy:2.4.5
 
   mongo:
-    image: mongo
+    image: mongo:4.2
     volumes:
       - ./MongoDB:/data/db
 
   mongo-express:
-    image: mongo-express
-    restart: always
+    image: mongo-express:1.0.0-alpha.4
 
   vue:
     build: ./Front-End
