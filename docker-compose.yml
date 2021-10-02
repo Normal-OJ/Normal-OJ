@@ -21,8 +21,15 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       - MONGO_HOST=mongo
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
 
   sandbox:
     build: ./Sandbox
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./redis-data:/data

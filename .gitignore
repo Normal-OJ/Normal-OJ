@@ -6,3 +6,5 @@ MongoDB
 .vscode
 .secret
 .DS_Store
+# For slack bot
+.env
