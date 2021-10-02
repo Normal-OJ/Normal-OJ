@@ -16,3 +16,7 @@ services:
   web:
     volumes:
       - ./Back-End:/app
+
+  sandbox:
+    volumes:
+      - ./Sandbox:/app

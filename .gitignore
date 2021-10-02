@@ -1,5 +1,3 @@
-# Docker-compose for production
-docker-compose.prod.yml
 # Caddy
 .caddy
 # MongoDB

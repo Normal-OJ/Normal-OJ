@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  caddy:
+    restart: unless-stopped
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - ./.config/Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./.caddy:/data
+      - vue-dist:/vue/dist
+    env_file:
+      - .secret/caddy.env
+
+  mongo:
+    restart: unless-stopped
+
+  mongo-express:
+    restart: unless-stopped
+    env_file:
+      - .secret/mongo-express.env
+
+  vue:
+    build:
+      dockerfile: Dockerfile.prod
+    volumes:
+      - vue-dist:/app/dist
+
+  web:
+    build:
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    env_file:
+      - .secret/web.env
+    volumes:
+      - ./Back-End/gunicorn_error.log:/app/gunicorn_error.log
+
+  sandbox:
+    env_file:
+      - .secret/sandbox.env
+    volumes:
+      - ./Sandbox/submissions:/app/submissions
+      - ./Sandbox/access.log:/app/access.log
+      - ./Sandbox/error.log:/app/error.log
+      - ./Sandbox/sandbox.log:/app/sandbox.log
+
+volumes:
+  vue-dist:

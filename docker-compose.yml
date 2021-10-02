@@ -25,5 +25,4 @@ services:
   sandbox:
     build: ./Sandbox
     volumes:
-      - ./Sandbox:/app
       - /var/run/docker.sock:/var/run/docker.sock
