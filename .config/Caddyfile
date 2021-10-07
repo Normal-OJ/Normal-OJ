@@ -3,19 +3,13 @@
 }
 
 :8080 {
-	log {
-		output stdout
+	log
+	handle_path /api/* {
+	 	reverse_proxy web:8080
 	}
-	@vue {
-		not {
-			path /api/*
-		}
+	handle  {
+		reverse_proxy vue:8080
 	}
-	reverse_proxy @vue vue:8080
-	route /api/* {
-		uri strip_prefix /api
-		reverse_proxy web:8080
-    }
 }
 
 :8081 {

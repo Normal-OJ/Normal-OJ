@@ -1,17 +1,11 @@
 {$SITE_ADDRESS} {
-	route /api/* {
-		uri strip_prefix /api
-		reverse_proxy web:8080
+	log
+	handle_path /api/* {
+	 	reverse_proxy web:8080
 	}
-	root * /vue/dist
-	@statics {
-		not {
-			path /api/*
-		}
-		file {
-			try_files {path} /index.html
-		}
+	handle {
+		root * /vue/dist
+		file_server
+		try_files {path} /index.html
 	}
-	rewrite @statics {http.matchers.file.relative}
-	file_server
 }
