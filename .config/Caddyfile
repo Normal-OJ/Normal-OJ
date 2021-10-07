@@ -1,14 +1,17 @@
-localhost:8080 {
-	proxy / vue:8080 {
-		websocket
-		transparent
+{
+	auto_https disable_redirects
+}
+
+:8080 {
+	log
+	handle_path /api/* {
+	 	reverse_proxy web:8080
 	}
-	proxy /api web:8080 {
-		transparent
-		without /api
+	handle  {
+		reverse_proxy vue:8080
 	}
 }
 
-localhost:8081 {
-	proxy / mongo-express:8081
+:8081 {
+	reverse_proxy mongo-express:8081
 }

@@ -1,0 +1,11 @@
+{$SITE_ADDRESS} {
+	log
+	handle_path /api/* {
+	 	reverse_proxy web:8080
+	}
+	handle {
+		root * /vue/dist
+		file_server
+		try_files {path} /index.html
+	}
+}
