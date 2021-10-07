@@ -16,9 +16,7 @@ services:
     build: ./Front-End
 
   web:
-    build:
-      context: ./Back-End
-      dockerfile: Dockerfile.dev
+    build: ./Back-End
     environment:
       - MONGO_HOST=mongo
       - REDIS_HOST=redis

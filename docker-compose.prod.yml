@@ -37,6 +37,8 @@ services:
       - ./Back-End/gunicorn_error.log:/app/gunicorn_error.log
 
   sandbox:
+    build:
+      dockerfile: Dockerfile.prod
     env_file:
       - .secret/sandbox.env
     volumes:
