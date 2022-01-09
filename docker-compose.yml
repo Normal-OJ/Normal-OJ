@@ -12,9 +12,6 @@ services:
   mongo-express:
     image: mongo-express:1.0.0-alpha.4
 
-  vue:
-    build: ./Front-End
-
   web:
     build: ./Back-End
     environment:

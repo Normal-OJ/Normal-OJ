@@ -1,11 +1,8 @@
 {$SITE_ADDRESS} {
 	log
-	handle_path /api/* {
+	handle_path /* {
 	 	reverse_proxy web:8080
-	}
-	handle {
-		root * /vue/dist
-		file_server
-		try_files {path} /index.html
+		header_down Access-Control-Allow-Headers *
+		header_down Access-Control-Allow-Origin *
 	}
 }

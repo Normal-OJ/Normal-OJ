@@ -9,6 +9,7 @@ services:
       - ./.config/Caddyfile:/etc/caddy/Caddyfile
 
   vue:
+    build: ./Front-End
     volumes:
       - ./Front-End:/app
       - /app/node_modules/
