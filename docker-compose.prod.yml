@@ -21,12 +21,6 @@ services:
     env_file:
       - .secret/mongo-express.env
 
-  vue:
-    build:
-      dockerfile: Dockerfile.prod
-    volumes:
-      - vue-dist:/app/dist
-
   web:
     build:
       dockerfile: Dockerfile.prod
