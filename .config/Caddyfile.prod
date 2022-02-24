@@ -1,8 +1,11 @@
 {$SITE_ADDRESS} {
-	log
-	handle_path /* {
-	 	reverse_proxy web:8080
-		header_down Access-Control-Allow-Headers *
-		header_down Access-Control-Allow-Origin *
-	}
+    log
+    handle {
+        reverse_proxy web:8080 {
+            header_down Access-Control-Allow-Headers Content-Type
+            # TODO: use env var to set this header
+            header_down Access-Control-Allow-Origin https://noj.tw
+            header_down Access-Control-Allow-Credentials true
+        }
+    }
 }
