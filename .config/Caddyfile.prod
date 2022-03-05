@@ -1,11 +1,18 @@
+(cors) {
+    @origin{args.0} header Origin {args.0}
+    header @origin{args.0} Access-Control-Allow-Origin "{args.0}"
+}
+
 {$SITE_ADDRESS} {
     log
     handle {
         reverse_proxy web:8080 {
             header_down Access-Control-Allow-Headers Content-Type
-            # TODO: use env var to set this header
-            header_down Access-Control-Allow-Origin https://noj.tw
+            header_down Access-Control-Allow-Methods "OPTIONS, GET, POST, PUT, DELETE, HEAD"
             header_down Access-Control-Allow-Credentials true
+            # TODO: use env var to control allow origin
+            import cors https://www.noj.tw
+            import cors https://v2.noj.tw
         }
     }
 }
