@@ -53,3 +53,11 @@ or if you want to rebuild the images
   - set `working_dir` to your desired location
 2. cd to `Sandbox` folder, run `./build.sh`, this will build the images you need to compile and execute user's submission
 3. that's all :P, i think
+
+##  Deploy
+
+1. `mv .secret.example .secret`
+
+2. modify config file
+
+3. `./deploy.sh`
