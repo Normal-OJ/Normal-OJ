@@ -16,10 +16,16 @@ services:
 
   web:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - ./Back-End:/app
 
   sandbox:
     volumes:
       - ./Sandbox:/app
+
+  prometheus:
+    ports:
+      - 9090:9090
+    volumes:
+      - ./.config/prometheus.yml:/etc/prometheus/prometheus.yml
