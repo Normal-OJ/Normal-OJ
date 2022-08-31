@@ -29,5 +29,3 @@ services:
     volumes:
       - ./redis-data:/data
 
-  prometheus:
-    image: prom/prometheus:v2.38.0

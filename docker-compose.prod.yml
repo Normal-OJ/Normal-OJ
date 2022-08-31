@@ -40,12 +40,27 @@ services:
       - ./Sandbox/access.log:/app/access.log
       - ./Sandbox/error.log:/app/error.log
       - ./Sandbox/sandbox.log:/app/sandbox.log
-        
+
   prometheus:
+    image: prom/prometheus:v2.38.0
     ports:
       - 9090:9090
     volumes:
       - ./.config/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - 8082:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
 
 volumes:
   vue-dist:
