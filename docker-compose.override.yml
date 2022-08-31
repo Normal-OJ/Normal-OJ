@@ -16,10 +16,11 @@ services:
 
   web:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - ./Back-End:/app
 
   sandbox:
     volumes:
       - ./Sandbox:/app
+
