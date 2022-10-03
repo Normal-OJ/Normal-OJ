@@ -9,7 +9,6 @@ services:
     volumes:
       - ./.config/Caddyfile.prod:/etc/caddy/Caddyfile
       - ./.caddy:/data
-      - vue-dist:/vue/dist
     env_file:
       - .secret/caddy.env
   mongo:
