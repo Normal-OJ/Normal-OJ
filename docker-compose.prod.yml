@@ -12,27 +12,24 @@ services:
       - vue-dist:/vue/dist
     env_file:
       - .secret/caddy.env
-
   mongo:
     restart: unless-stopped
-
   mongo-express:
     restart: unless-stopped
     env_file:
       - .secret/mongo-express.env
-
   web:
     build:
-      dockerfile: Dockerfile.prod
+      target: production
     restart: unless-stopped
     env_file:
       - .secret/web.env
     volumes:
       - ./Back-End/gunicorn_error.log:/app/gunicorn_error.log
-
   sandbox:
     build:
       dockerfile: Dockerfile.prod
+    restart: unless-stopped
     env_file:
       - .secret/sandbox.env
     volumes:
@@ -40,6 +37,5 @@ services:
       - ./Sandbox/access.log:/app/access.log
       - ./Sandbox/error.log:/app/error.log
       - ./Sandbox/sandbox.log:/app/sandbox.log
-
-volumes:
-  vue-dist:
+  redis:
+    restart: unless-stopped

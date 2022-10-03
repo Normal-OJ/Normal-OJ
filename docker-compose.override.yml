@@ -7,19 +7,16 @@ services:
       - 8081:8081
     volumes:
       - ./.config/Caddyfile:/etc/caddy/Caddyfile
-
   vue:
     build: ./Front-End
     volumes:
       - ./Front-End:/app
       - /app/node_modules/
-
   web:
     build:
-      dockerfile: Dockerfile.dev
+      target: development
     volumes:
       - ./Back-End:/app
-
   sandbox:
     volumes:
       - ./Sandbox:/app
