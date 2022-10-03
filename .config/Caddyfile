@@ -4,12 +4,13 @@
 
 :8080 {
 	log
+	metrics /metrics
+	# backend API
 	handle_path /api/* {
 	 	reverse_proxy web:8080
 	}
-	handle  {
-		reverse_proxy vue:8080
-	}
+	# frontend dev server
+	reverse_proxy vue:8080
 }
 
 :8081 {

@@ -11,5 +11,7 @@
     # TODO: use env var to control allow origin, or move these to flask
     import cors https://www.noj.tw
     import cors https://v2.noj.tw
+
+    metrics /metrics
     reverse_proxy web:8080
 }
