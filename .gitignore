@@ -8,3 +8,5 @@ MongoDB
 .DS_Store
 # For slack bot
 .env
+# Redis
+redis-data/
