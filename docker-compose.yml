@@ -2,29 +2,24 @@ version: "3"
 
 services:
   caddy:
-    image: caddy:2.4.5
-
+    image: caddy:2
   mongo:
     image: mongo:4.2
     volumes:
       - ./MongoDB:/data/db
-
   mongo-express:
     image: mongo-express:1.0.0-alpha.4
-
   web:
     build: ./Back-End
     environment:
       - MONGO_HOST=mongo
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-
   sandbox:
     build: ./Sandbox
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     volumes:
       - ./redis-data:/data
