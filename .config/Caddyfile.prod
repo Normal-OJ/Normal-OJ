@@ -1,18 +1,31 @@
 (cors) {
-    @origin{args.0} header_regexp origin Origin {args.0}
-    header @origin{args.0} Access-Control-Allow-Origin {re.origin.0}
+	@origin{args.0} header_regexp origin Origin {args.0}
+	header @origin{args.0} Access-Control-Allow-Origin {re.origin.0}
 }
 
 {$SITE_ADDRESS} {
-    log
-    header Access-Control-Allow-Headers Content-Type
-    header Access-Control-Allow-Methods "OPTIONS, GET, POST, PUT, DELETE, HEAD, PATCH"
-    header Access-Control-Allow-Credentials true
-    # TODO: use env var to control allow origin, or move these to flask
-    import cors "https://([^.]+\.)?nfe\.pages\.dev"
-    import cors "https://([^.]+\.)?noj\.tw"
-    import cors "http://localhost(:\d+)?"
+	# https://developers.cloudflare.com/fundamentals/reference/http-request-headers/#cf-connecting-ip
+	@fromCloudflare {
+		header ​​CF-Connecting-IP *
+	}
 
-    metrics /metrics
-    reverse_proxy web:8080
+	log
+	header Access-Control-Allow-Headers Content-Type
+	header Access-Control-Allow-Methods "OPTIONS, GET, POST, PUT, DELETE, HEAD, PATCH"
+	header Access-Control-Allow-Credentials true
+
+	# TODO: use env var to control allow origin, or move these to flask
+	import cors "https://([^.]+\.)?nfe\.pages\.dev"
+	import cors "https://([^.]+\.)?noj\.tw"
+	import cors "http://localhost(:\d+)?"
+
+	metrics /metrics
+
+	handle @fromCloudflare {
+		reverse_proxy web:8080 {
+			header_up X-Forwarded-For "{header.X-Forwarded-For}, {header.​CF-Connecting-IP}"
+		}
+	}
+
+	reverse_proxy web:8080
 }
