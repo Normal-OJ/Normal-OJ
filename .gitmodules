@@ -4,6 +4,6 @@
 [submodule "Sandbox"]
 	path = Sandbox
 	url = https://github.com/Normal-OJ/Sandbox.git
-[submodule "Front-End"]
-	path = Front-End
-	url = https://github.com/Normal-OJ/Front-End.git
+[submodule "new-front-end"]
+	path = new-front-end
+	url = git@github.com:Normal-OJ/new-front-end.git
