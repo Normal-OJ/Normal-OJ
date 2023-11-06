@@ -10,7 +10,7 @@
 	 	reverse_proxy web:8080
 	}
 	# frontend dev server
-	reverse_proxy vue:8080
+	reverse_proxy vue:5173
 }
 
 :8081 {
