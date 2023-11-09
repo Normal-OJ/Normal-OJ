@@ -8,10 +8,12 @@ services:
     volumes:
       - ./.config/Caddyfile:/etc/caddy/Caddyfile
   vue:
-    build: ./Front-End
+    build: ./new-front-end
+    environment:
+      - VITE_APP_API_BASE_URL=http://localhost:8080/api
     volumes:
-      - ./Front-End:/app
-      - /app/node_modules/
+      - ./new-front-end:/app
+      - exclude:/app/node_modules
   web:
     build:
       target: development
@@ -20,3 +22,6 @@ services:
   sandbox:
     volumes:
       - ./Sandbox:/app
+
+volumes:
+    exclude:
