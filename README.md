@@ -21,9 +21,11 @@ You may also be interested in this [Introduction](https://github.com/Normal-OJ).
 
 ### Setup Sandbox
 
-1. in `Sandbox/.config/submission.json`:
-  - set `working_dir` to your desired location to store the user's submission
-2. cd to `Sandbox` folder, run `./build.sh`, this will build the images you need to compile and execute user's submission
+1. Make sure you have Docker installed and running.
+2. cd to `Sandbox` folder, run `./build.sh`, this will build the images you need to compile and execute user's submission.
+3. Replace `working_dir` in `Sandbox/.config/submission.json` as stated in the logs of the previous step.
+  - Recommend to use `/path/to/Normal-OJ/Sandbox/submissions`.
+  - This directory is for storing the user's submission.
 
 ### Run Docker
 
