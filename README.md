@@ -2,32 +2,30 @@
 
 ## Clone this project
 
-```bash
-git clone https://github.com/Normal-OJ/Normal-OJ.git
-```
-Enter the project directory:
-```bash
-cd Normal-OJ
-```
-Clone submodules:
-```bash
-git submodule update --init --recursive
-git submodule foreach --recursive git checkout main
-```
+1. `git clone --recurse-submodules https://github.com/Normal-OJ/Normal-OJ.git`
+2. `cd Normal-OJ`
+3. `git submodule foreach --recursive git checkout main`
 
 ## Overview of the project
-Checkout the [Introduction](https://github.com/Normal-OJ).
 
-NOJ contains three parts:
+NOJ consists of three parts:
 1. **[Backend](https://github.com/Normal-OJ/Back-End)**: Python web server, provides RESTful API, communicates with the database and the sandbox.
 2. **[Frontend](https://github.com/Normal-OJ/new-front-end)**: The user interface that interacts with the backend, written in Vue.js.
 3. **[Sandbox](https://github.com/Normal-OJ/Sandbox)**: Takes the user's submission, compiles and executes the code, and returns the result to the backend.
 
 Each subfolder in this project corresponds to a specific part of NOJ (Backend, Frontend, Sandbox) and includes its own package manager, such as `pnpm` or `poetry`. Ideally, each part could be developed separately and locally, please refer to the `README.md` file in each subfolder.
 
-To run the entire project, see the "Run Docker" section below.
+You may also be interested in this [Introduction](https://github.com/Normal-OJ).
 
-## Run Docker
+## Build and Run the entire project
+
+### Setup Sandbox
+
+1. in `Sandbox/.config/submission.json`:
+  - set `working_dir` to your desired location to store the user's submission
+2. cd to `Sandbox` folder, run `./build.sh`, this will build the images you need to compile and execute user's submission
+
+### Run Docker
 
 #### Build images and start
 
@@ -47,12 +45,3 @@ In production, the frontend is hosted on Cloudflare Pages, not locally.
 - `docker-compose restart [service]`
 - `docker-compose stop`
 - `docker-compose down`
-
-## Setup Sandbox
-
-### Sandbox
-
-1. in `Sandbox/.config/submission.json`:
-  - set `working_dir` to your desired location to store the user's submission
-2. cd to `Sandbox` folder, run `./build.sh`, this will build the images you need to compile and execute user's submission
-3. that's all :P, i think
