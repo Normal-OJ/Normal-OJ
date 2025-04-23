@@ -19,9 +19,9 @@ git submodule foreach --recursive git checkout main
 Checkout the [Introduction](https://github.com/Normal-OJ).
 
 NOJ contains three parts:
-1. **Backend**: Python web server, provides RESTful API, communicates with the database and the sandbox.
-2. **Frontend**: The user interface that interacts with the backend, written in Vue.js.
-3. **Sandbox**: Takes the user's submission, compiles and executes the code, and returns the result to the backend.
+1. **[Backend](https://github.com/Normal-OJ/Back-End)**: Python web server, provides RESTful API, communicates with the database and the sandbox.
+2. **[Frontend](https://github.com/Normal-OJ/new-front-end)**: The user interface that interacts with the backend, written in Vue.js.
+3. **[Sandbox](https://github.com/Normal-OJ/Sandbox)**: Takes the user's submission, compiles and executes the code, and returns the result to the backend.
 
 Each subfolder in this project corresponds to a specific part of NOJ (Backend, Frontend, Sandbox) and includes its own package manager, such as `pnpm` or `poetry`. Ideally, each part could be developed separately and locally, please refer to the `README.md` file in each subfolder.
 
