@@ -31,19 +31,19 @@ You may also be interested in this [Introduction](https://github.com/Normal-OJ).
 
 #### Build images and start
 
-`docker-compose up -d`
+`docker compose up -d`
 
 or if you want to rebuild the images
 
-`docker-compose up --build -d`
+`docker compose up --build -d`
 
-When you run `docker-compose up`, Docker Compose automatically combines `docker-compose.yml` and `docker-compose.override.yml`. You can check the `docker-compose.override.yml` file, and you'll see the frontend is running locally on port 8080.
+When you run `docker compose up`, Docker Compose automatically combines `docker compose.yml` and `docker compose.override.yml`. You can check the `docker compose.override.yml` file, and you'll see the frontend is running locally on port 8080.
 
 In production, the frontend is hosted on Cloudflare Pages, not locally.
 
 #### Other commands
 
-- `docker-compose start`
-- `docker-compose restart [service]`
-- `docker-compose stop`
-- `docker-compose down`
+- `docker compose start`
+- `docker compose restart [service]`
+- `docker compose stop`
+- `docker compose down`
