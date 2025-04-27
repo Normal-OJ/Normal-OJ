@@ -15,8 +15,29 @@ services:
   web:
     build:
       target: development
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_HOST=localhost:9000
+      - MINIO_ACCESS_KEY=normal-oj-testing
+      - MINIO_SECRET_KEY=normal-oj-testing-secret
+      - MINIO_BUCKET=normal-oj-testing
     volumes:
       - ./Back-End:/app
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
+    # Share the network namespace with the "web" service to allow the backend 
+    # to access MinIO using localhost:9000. The default bridge network would 
+    # cause presigned URLs to start with minio:9000, which cannot be used by 
+    # the frontend (browser) for requests.
+    network_mode: "service:web"
+    environment:
+      - MINIO_ROOT_USER=noj
+      - MINIO_ROOT_PASSWORD=normal-oj-testing
+    volumes:
+      - ./Back-End/minio/data:/data
+    command: ["server", "/data", "--console-address", ":9001"]
   sandbox:
     volumes:
       - ./Sandbox:/app

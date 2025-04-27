@@ -19,6 +19,10 @@ You may also be interested in this [Introduction](https://github.com/Normal-OJ).
 
 ## Build and Run the entire project
 
+### Setup Backend
+
+Run `mkdir -p ./Back-End/minio/data`.
+
 ### Setup Sandbox
 
 1. Make sure you have Docker installed and running.
@@ -40,6 +44,16 @@ or if you want to rebuild the images
 When you run `docker compose up`, Docker Compose automatically combines `docker compose.yml` and `docker compose.override.yml`. You can check the `docker compose.override.yml` file, and you'll see the frontend is running locally on port 8080.
 
 In production, the frontend is hosted on Cloudflare Pages, not locally.
+
+### Setup MinIO
+
+You can skip this if you will not develop features related to Problems and Submissions.
+
+Refer to the `docker-compose.override.yml` file for the following configurations:
+
+1. Open the MinIO console at http://localhost:9001 and log in using the username (`MINIO_ROOT_USER`) and password (`MINIO_ROOT_PASSWORD`) specified in the yml file.
+2. In the MinIO console, navigate to **Object Browser** and create a bucket with the name specified (`MINIO_BUCKET`).
+3. In the MinIO console, navigate to **Access Keys** and create an access key (`MINIO_ACCESS_KEY`) and secret key (`MINIO_SECRET_KEY`).
 
 #### Other commands
 
