@@ -61,3 +61,11 @@ Refer to the `docker-compose.override.yml` file for the following configurations
 - `docker compose restart [service]`
 - `docker compose stop`
 - `docker compose down`
+
+### Visit the local NOJ page
+
+Now you could visit http://localhost:8080 to see the NOJ page.
+
+Login with the admin with
+- username: `first_admin`
+- password: `firstpasswordforadmin`
