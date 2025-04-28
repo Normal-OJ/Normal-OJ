@@ -6,6 +6,12 @@ services:
     volumes:
       - ./MongoDB:/data/db
   mongo-express:
+    restart:
+      always
+    depends_on:
+      - mongo
+    links:
+      - mongo
     image: mongo-express:1.0.0-alpha.4
   web:
     build: ./Back-End
