@@ -31,8 +31,6 @@ services:
       - .secret/sandbox.env
     volumes:
       - ./Sandbox/submissions:/app/submissions
-      - ./Sandbox/access.log:/app/access.log
-      - ./Sandbox/error.log:/app/error.log
-      - ./Sandbox/sandbox.log:/app/sandbox.log
+      - ./Sandbox/logs:/app/logs
   redis:
     restart: unless-stopped
