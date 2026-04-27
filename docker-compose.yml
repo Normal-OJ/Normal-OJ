@@ -13,11 +13,17 @@ services:
       - MONGO_HOST=mongo
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - RUNNER_REGISTRATION_TOKEN=${RUNNER_REGISTRATION_TOKEN:-dev-only-registration-token-change-me}
   sandbox:
     build: ./Sandbox
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - BACKEND_URL=http://web:8080
+      - RUNNER_REGISTRATION_TOKEN=${RUNNER_REGISTRATION_TOKEN:-dev-only-registration-token-change-me}
+      - RUNNER_NAME=sandbox-default
   redis:
     image: redis:7-alpine
     volumes:
       - ./redis-data:/data
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
