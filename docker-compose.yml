@@ -16,10 +16,14 @@ services:
       - RUNNER_REGISTRATION_TOKEN=${RUNNER_REGISTRATION_TOKEN:-dev-only-registration-token-change-me}
   sandbox:
     build: ./Sandbox
+    # Share network namespace with web (and minio, which already shares with web).
+    # Required because presigned URLs from backend embed 'localhost:9000' (browser-
+    # accessible). Sandbox needs to reach MinIO at the same hostname as backend does.
+    network_mode: "service:web"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - BACKEND_URL=http://web:8080
+      - BACKEND_URL=http://localhost:8080
       - RUNNER_REGISTRATION_TOKEN=${RUNNER_REGISTRATION_TOKEN:-dev-only-registration-token-change-me}
       - RUNNER_NAME=sandbox-default
   redis:
