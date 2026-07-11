@@ -16,6 +16,7 @@ services:
       - RUNNER_REGISTRATION_TOKEN=${RUNNER_REGISTRATION_TOKEN:-dev-only-registration-token-change-me}
   sandbox:
     build: ./Sandbox
+    restart: unless-stopped
     # Share network namespace with web (and minio, which already shares with web).
     # Required because presigned URLs from backend embed 'localhost:9000' (browser-
     # accessible). Sandbox needs to reach MinIO at the same hostname as backend does.
