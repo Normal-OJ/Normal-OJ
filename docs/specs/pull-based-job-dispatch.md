@@ -38,6 +38,31 @@ Backend 沒有排程器、health check、stuck submission 偵測。
 - **N6** 判題 dispatch 不擴展為通用 task queue；未來寄信/MOSS 用 in-stack Celery/RQ + 現有 Redis 另行立案
 - **N7** Frontend「Sandbox 設定」頁暫不處理（backend 移除其依賴的 endpoint 後該頁失效；以 issue 追蹤）
 
+### User Stories
+
+**學生（提交者）**
+1. As a 學生, I want 提交後在有限時間內拿到判題結果或明確的錯誤狀態（JE）, so that 我不會對著永遠 Pending 的提交乾等。
+2. As a 學生, I want 某台 runner 故障時我的提交自動由其他 runner 接手重跑, so that 基礎設施故障不影響我的成績與繳交期限。
+3. As a 學生, I want 長時間執行的提交（大測資）不會被誤判為故障而中斷, so that 合法的長程式能正常完成判題。
+4. As a 學生, I want 考試尖峰時提交依序被消化（FIFO）, so that 我的提交不會被插隊或遺失。
+
+**教師 / 課程管理者**
+5. As a 教師, I want 修正測資後批次 rejudge 整題, so that 全部學生的成績以新測資為準。
+6. As a 教師, I want rejudge 撞上進行中的判題時，最終成績必為新一輪的結果, so that 不會出現過時結果覆蓋新結果。
+7. As a 教師, I want 被標成 JE 的提交可用 rejudge 救回, so that 暫時性基礎設施問題不會永久影響成績。
+
+**系統管理員 / 運維**
+8. As a 系統管理員, I want 開新機器、給一個 registration token 就加入判題叢集, so that 考試前擴增不需進 admin UI 或改設定。
+9. As a 系統管理員, I want 考試後對 runner 直接下關機（drain）, so that 進行中的判題不遺失、未開始的立即轉給其他 runner。
+10. As a 系統管理員, I want 透過 admin API 看到所有 runner 的存活狀態與持有工作, so that 考試中能即時掌握判題容量。
+11. As a 系統管理員, I want 個別撤銷某台失控或外洩的 runner, so that 不必全機隊換密鑰重啟。
+12. As a 系統管理員, I want 死亡 runner 的紀錄自動消失, so that 管理視圖不被歷史殘骸淹沒。
+13. As a 系統管理員, I want Redis 或 backend 重啟後系統自動收斂回正常, so that 深夜故障不需人工介入。
+
+**維護者**
+14. As a 後端維護者, I want 每個變更以小而自足、獨立綠燈的 PR 交付, so that review 品質與速度可控。
+15. As a 後端維護者, I want 系統行為由核心不變量（INV1–5）定義且各有對應測試, so that 重構時能快速驗證正確性未被破壞。
+
 ## 3. 決策摘要
 
 | 決策點 | 選擇 | 依據 |
