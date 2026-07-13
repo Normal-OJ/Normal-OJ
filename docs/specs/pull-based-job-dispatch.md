@@ -291,6 +291,8 @@ Small CLs / dark-launch（Keystone Interface + Parallel Change）：新碼以多
 
 註：切片 1–5（backend）與 1–3（sandbox）皆為 dark（無呼叫者）；auth 相關切片（backend 1、4）實作與 review 需過安全視角檢查。
 
+切片形狀是**刻意的分層切**而非垂直 tracer bullet：Lua 原子性審查集中在 job 生命週期兩片內（連貫審查優先於逐片可 demo），每片仍以 fakeredis 單元層獨立綠燈，HTTP 主 seam 的驗證集中於 HTTP 層切片與 keystone。
+
 ### 15.3 部署
 挑無考試時段：merge keystone → bump submodules → `deploy.sh` → smoke test（提交一題、`docker kill sandbox` 驗證 45s 內 reclaim、`docker stop` 驗證 drain）→ 卡住的舊 submission 以 rejudge 救。Rollback：Mongo schema 未變，checkout 前版即可完全回退。
 
