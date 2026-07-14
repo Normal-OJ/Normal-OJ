@@ -124,7 +124,7 @@ Review 與測試以此清單為地圖；每條不變量在 §9 狀態機各有�
 ### 7.1 `POST /runners/register`
 Body：`{"registration_token": "...", "name": "runner-ec2-1"}`。
 回 `201`：`{"runner_id", "token", "config": {"heartbeat_interval_sec": 15, "poll_interval_sec": 3, "max_concurrent_jobs": 8}}`；token 不對回 `401`。
-Backend 動作：發 `rn_id`/`rk_token`（只存 SHA-256）、寫 meta（name、registered_at、ip）帶 7d TTL、`ZADD runners:registered <now> <rn_id>`；順手清 ZSET 中 score 老於 7 天的成員及其 keys。
+Backend 動作：發 `rn_id`/`rk_token`（只存 SHA-256）、寫 meta（name、registered_at、ip）帶 7d TTL、`ZADD runners:registered <now> <rn_id>`；順手清 ZSET 中 score 老於 7 天**且 token_hash 已因 TTL 蒸發**的成員及其殘留 keys（TTL 是唯一使活身分失效的機制，GC 只收屍、不刪仍持有效鑰匙的身分——避免「掃描後、刪除前」撞上續期的 TOCTOU）。
 
 ### 7.2 `POST /runners/<rn>/heartbeat`
 Body：`{"active_job_ids": ["jb_...", ...]}`。回 `204`。
