@@ -129,6 +129,7 @@ Backend 動作：發 `rn_id`/`rk_token`（只存 SHA-256）、寫 meta（name、
 ### 7.2 `POST /runners/<rn>/heartbeat`
 Body：`{"active_job_ids": ["jb_...", ...]}`。回 `204`。
 Backend 動作：`ZADD runners:registered <now>`、meta/token keys 續 TTL、對每個 active job 驗 `leased_by == rn` 後更新 `lease_deadline = now + 30s`（Lua）。不在列表中的 job 續租自然停止 → 過期成為 Orphan（INV2）。
+續 TTL 一律用 `EXPIRE`（只延長既有 key）——**不得重建已蒸發的 token_hash/meta**：GC 的免鎖收屍安全性依賴「token_hash 一旦消失即不可再現於同一 rn_id」這條不變量（§7.1）。
 
 ### 7.3 `GET /runners/<rn>/next-job`
 回 `200` + payload 或 `204`（無工作）。
