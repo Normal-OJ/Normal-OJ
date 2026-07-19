@@ -124,6 +124,7 @@ Review 與測試以此清單為地圖；每條不變量在 §9 狀態機各有�
 ### 7.1 `POST /runners/register`
 Body：`{"registration_token": "...", "name": "runner-ec2-1"}`。
 回 `201`：`{"runner_id", "token", "config": {"heartbeat_interval_sec": 15, "poll_interval_sec": 3, "max_concurrent_jobs": 8}}`；token 不對回 `401`。
+`registration_token` 與**啟動時載入**的部署設定 `RUNNER_REGISTRATION_TOKEN` 比對（ADR-0005）：未設定 ⇒ 註冊停用、一律 `401`（fail closed）；更換或撤銷這把共用密鑰需重啟 Back-End。個別 runner 的即時撤銷不在此列——刪 `token_hash` 即 `401`（ADR-0004）。
 Backend 動作：發 `rn_id`/`rk_token`（只存 SHA-256）、寫 meta（name、registered_at、ip）帶 7d TTL、`ZADD runners:registered <now> <rn_id>`；順手清 ZSET 中 score 老於 7 天**且 token_hash 已因 TTL 蒸發**的成員及其殘留 keys（TTL 是唯一使活身分失效的機制，GC 只收屍、不刪仍持有效鑰匙的身分——避免「掃描後、刪除前」撞上續期的 TOCTOU）。
 
 ### 7.2 `POST /runners/<rn>/heartbeat`
@@ -220,7 +221,7 @@ SIGTERM（drain）：停止 poll → 未開始的 job abort(reason=drain) → �
 
 ```
 dispatch/           # Redis-based，全新模組
-├ config.py         # 參數（見 §13）
+├ params.py         # 協定參數（見 §13）；部署設定不住這裡，一律住頂層 config.py（ADR-0005）
 ├ redis_keys.py     # 集中 key 命名
 ├ runner.py         # register / verify_token / GC / list_runners
 ├ job.py            # enqueue / claim / renew / reclaim / complete / abort
@@ -266,7 +267,7 @@ model/schemas/runner.py、model/utils/runner_auth.py
 
 - Redis 開 AOF：`--appendonly yes --appendfsync everysec`（queue 的持久性依據）
 - Sandbox service：entrypoint 改 `python main.py`；**restart policy `unless-stopped`**（fail-fast 重生依據）；無 HTTP port、無 healthcheck endpoint（liveness 由 backend 端 last-seen 呈現）
-- `.secret/web.env`、`sandbox.env`：`RUNNER_REGISTRATION_TOKEN`（兩側同值）、`BACKEND_URL`
+- `.secret/web.env`、`sandbox.env`：`RUNNER_REGISTRATION_TOKEN`（兩側同值；更換後需重啟 web 才生效，ADR-0005）、`BACKEND_URL`
 
 ## 15. 交付計畫（G5 的落實）
 

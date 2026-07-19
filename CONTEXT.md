@@ -45,3 +45,13 @@ _Avoid_: sandbox runner、worker pool
 **Drain**:
 Runner 收到關機訊號後，退還未開始的 Job、等待進行中 Job 完成的收尾過程。Drain 造成的退還不視為 Job 的失敗。
 _Avoid_: graceful shutdown（指整個行程層面時可用，指 Job 處置時用 Drain）
+
+### 設定（Configuration）
+
+**協定參數（Protocol parameter）**:
+Spec 定死、Back-End 與 Runner 兩側必須一致遵守的數值（如 heartbeat 間隔、lease TTL）。改動即 spec 修訂，不隨部署環境調整。
+_Avoid_: config、環境變數、settings
+
+**部署設定（Deployment setting）**:
+隨部署環境而異、由環境變數提供、啟動時一次載入並驗證的值（如資料庫位址、密鑰）。
+_Avoid_: config（不區分性質時）、參數
