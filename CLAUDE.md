@@ -118,6 +118,7 @@ Sandbox CI uses Python 3.10. The runtime container uses Python 3.13 (see `Docker
 ## Conventions worth noting
 
 - **Commit style**: front-end CONTRIBUTING.md mandates [conventional commits](https://www.conventionalcommits.org/) and `feat/`, `fix/`, `refactor/` branch prefixes. Existing commits in this meta-repo follow the same convention.
+- **PR–issue linking**: every PR body must reference the issue it implements with a closing keyword — `closes #<n>` for a same-repo issue, `closes Normal-OJ/Normal-OJ#<n>` for issues tracked in this meta-repo — so the issue auto-closes when the PR merges. A bare `#<n>` reference is not enough.
 - **Submodule pointers**: editing a submodule and committing inside it updates *that submodule's* HEAD; bumping the pointer in this meta-repo is a separate commit at the root. Be deliberate about which repo you're committing to.
 - **Secrets**: production env files live in `.secret/` (gitignored). `.secret.example/` shows the required keys for `caddy.env`, `mongo-express.env`, `sandbox.env`, `web.env`.
 - **Logs**: `Back-End/logs/` and `Sandbox/logs/` are bind-mounted in the prod compose file. `gunicorn_error.log` is also bind-mounted on the backend.
