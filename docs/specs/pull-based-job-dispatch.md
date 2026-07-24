@@ -149,6 +149,7 @@ Body：`{"tasks": [...]}`（shape 同現行 callback）。
 ### 7.5 `PUT /runners/<rn>/jobs/<jb>/abort`
 Body：`{"reason": "drain" | "prep_failed" | "rejected"}`。回 `202`；`409`/`404` 同上。
 語意：清 lease、推回 pending 隊尾。**`drain` 不計 attempts**（rolling restart 不得折損 job 壽命）；`prep_failed`/`rejected` 計入（poison 收斂路徑，INV5）。計數後達上限 → 標 JE（走 INV1 流程）。
+因 claim 每次皆計數（§13），「drain 不計」的實作為**退款**：drain requeue 時退還該次 claim 的計數（下限 0），使 claim+drain 一來一回淨額為零——否則每輪 drain→requeue→重新 claim 仍會侵蝕重試預算。poison 收斂路徑不受影響。
 
 ### 7.6 `GET /runners`（admin-only，`@login_required` + admin 權限）
 列出 ZSET 成員：`[{"runner_id", "name", "last_seen", "alive", "active_jobs": [...]}]`。資料來源為 backend 記帳（非自報）。
