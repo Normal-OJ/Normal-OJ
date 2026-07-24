@@ -216,7 +216,9 @@ SIGTERM（drain）：停止 poll → 未開始的 job abort(reason=drain) → �
 
 **job_id keying（關鍵改動）**：工作目錄、容器命名、dispatcher 內部字典（locks/result/created_at）全部以 `job_id` 為 key。同 submission 的多個 job 是**合法並行狀態**（rejudge 撞窗口時發生，見 §12），`DuplicatedSubmissionIdError` 防線與 `prepare_submission_dir` 的 FileExistsError 特判整組刪除。
 
-環境變數：`BACKEND_URL`（統一命名，`BACKEND_API` 刪除）、`RUNNER_REGISTRATION_TOKEN`、`RUNNER_NAME`（選填，log/admin 顯示用穩定名）、`MAX_CONTAINER_NUMBER` 等沿用。`SANDBOX_TOKEN` 死碼刪除。
+**容量定義（keystone 定案）**：「有容量」只看 job 維度——`len(tracker) < max_concurrent_jobs`。task 維度不設獨立上限：dispatcher 的 task queue 改為無上限，poller 是唯一 producer，task 總量天然被 job 閘 × 每 job case 數封頂。這使 `handle()` 原子化免費成立（驗證全在狀態寫入之前、入列不可能失敗），「claim 了卻塞不進去、白燒 attempts」整條路徑消失——slot-aware gate 關不死這條路，因為 claim 之前不可能知道下一個 job 的 case 數。同時刪除 dispatcher 層 300s job timeout：它只會悄悄丟棄 queued task、job 永不完成，pull 模式下等同 heartbeat 無限續租的永久卡死；per-case 上限由 executor 層兜底（compile 20s、執行 docker wait 5×time_limit → JE），executor 沒包到的例外（如 docker APIError）由 dispatcher 以 JE 收斂，保證 in-flight job 必然跑完。
+
+環境變數：`BACKEND_URL`（統一命名，`BACKEND_API` 刪除）、`RUNNER_REGISTRATION_TOKEN`、`RUNNER_NAME`（選填，log/admin 顯示用穩定名）、`MAX_CONTAINER_NUMBER` 等沿用。`SANDBOX_TOKEN` 的 push 路徑用途隨 app.py 刪除；testdata 通道（`/problem/<id>/meta|testdata|checksum ?token=`）仍以它驗證，退場需與 backend keystone 對那三個 endpoints 的 re-auth 一併定案（backend keystone 刪 `mongo/sandbox.py` 時該通道的驗證即失去依附，缺口已記錄於 #66）。
 
 ## 11. Backend 內部結構
 
