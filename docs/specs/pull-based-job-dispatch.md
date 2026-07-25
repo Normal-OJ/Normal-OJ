@@ -25,7 +25,7 @@ Backend 沒有排程器、health check、stuck submission 偵測。
 ### Goals
 - **G1** 消滅 submission 卡 Pending（所有 runner 失效情境有自動復原路徑）
 - **G2** Runner 自我註冊；加新 runner 只需一個 registration token
-- **G3** 為「考試前手動擴增 runner、考後關機」運維模式鋪路
+- **G3** 為「考試前手動擴增 runner、考後關機」維運模式鋪路
 - **G4** 單一 dispatch path，不長期維護兩套
 - **G5** 交付產物可分段 review（每個 PR 是自足、可理解的小單位）
 
@@ -35,33 +35,33 @@ Backend 沒有排程器、health check、stuck submission 偵測。
 - **N3** Runner zombie 偵測（per-job lease 已鋪 hook，v2 再補 watchdog）
 - **N4** 進階 admin UI（v1 提供最小 admin API，見 §7.6）
 - **N5** 新增 MongoDB collection（transient 狀態全在 Redis）
-- **N6** 判題 dispatch 不擴展為通用 task queue；未來寄信/MOSS 用 in-stack Celery/RQ + 現有 Redis 另行立案
+- **N6** 判題 dispatch 不擴充為通用 task queue；未來寄信/MOSS 用 in-stack Celery/RQ + 現有 Redis 另行立案
 - **N7** Frontend「Sandbox 設定」頁暫不處理（backend 移除其依賴的 endpoint 後該頁失效；以 issue 追蹤）
 
 ### User Stories
 
 **學生（提交者）**
-1. As a 學生, I want 提交後在有限時間內拿到判題結果或明確的錯誤狀態（JE）, so that 我不會對著永遠 Pending 的提交乾等。
-2. As a 學生, I want 某台 runner 故障時我的提交自動由其他 runner 接手重跑, so that 基礎設施故障不影響我的成績與繳交期限。
-3. As a 學生, I want 長時間執行的提交（大測資）不會被誤判為故障而中斷, so that 合法的長程式能正常完成判題。
-4. As a 學生, I want 考試尖峰時提交依序被消化（FIFO）, so that 我的提交不會被插隊或遺失。
+1. As a 學生，I want 提交後在有限時間內拿到判題結果或明確的錯誤狀態（JE），so that 我不會對著永遠 Pending 的提交乾等。
+2. As a 學生，I want 某台 runner 故障時我的提交自動由其他 runner 接手重跑，so that 基礎設施故障不影響我的成績與繳交期限。
+3. As a 學生，I want 長時間執行的提交（大測資）不會被誤判為故障而中斷，so that 合法的長程式能正常完成判題。
+4. As a 學生，I want 考試尖峰時提交依序被消化（FIFO），so that 我的提交不會被插隊或遺失。
 
 **教師 / 課程管理者**
-5. As a 教師, I want 修正測資後批次 rejudge 整題, so that 全部學生的成績以新測資為準。
-6. As a 教師, I want rejudge 撞上進行中的判題時，最終成績必為新一輪的結果, so that 不會出現過時結果覆蓋新結果。
-7. As a 教師, I want 被標成 JE 的提交可用 rejudge 救回, so that 暫時性基礎設施問題不會永久影響成績。
+5. As a 教師，I want 修正測資後批次 rejudge 整題，so that 全部學生的成績以新測資為準。
+6. As a 教師，I want rejudge 撞上進行中的判題時，最終成績必為新一輪的結果，so that 不會出現過時結果覆蓋新結果。
+7. As a 教師，I want 被標成 JE 的提交可用 rejudge 救回，so that 暫時性基礎設施問題不會永久影響成績。
 
-**系統管理員 / 運維**
-8. As a 系統管理員, I want 開新機器、給一個 registration token 就加入判題叢集, so that 考試前擴增不需進 admin UI 或改設定。
-9. As a 系統管理員, I want 考試後對 runner 直接下關機（drain）, so that 進行中的判題不遺失、未開始的立即轉給其他 runner。
-10. As a 系統管理員, I want 透過 admin API 看到所有 runner 的存活狀態與持有工作, so that 考試中能即時掌握判題容量。
-11. As a 系統管理員, I want 個別撤銷某台失控或外洩的 runner, so that 不必全機隊換密鑰重啟。
-12. As a 系統管理員, I want 死亡 runner 的紀錄自動消失, so that 管理視圖不被歷史殘骸淹沒。
-13. As a 系統管理員, I want Redis 或 backend 重啟後系統自動收斂回正常, so that 深夜故障不需人工介入。
+**系統管理員 / 維運**
+8. As a 系統管理員，I want 開新機器、給一個 registration token 就加入判題叢集，so that 考試前擴增不需進 admin UI 或改設定。
+9. As a 系統管理員，I want 考試後對 runner 直接下關機（drain），so that 進行中的判題不遺失、未開始的立即轉給其他 runner。
+10. As a 系統管理員，I want 透過 admin API 看到所有 runner 的存活狀態與持有工作，so that 考試中能即時掌握判題容量。
+11. As a 系統管理員，I want 個別撤銷某台失控或外洩的 runner，so that 不必全機隊換金鑰重啟。
+12. As a 系統管理員，I want 死亡 runner 的紀錄自動消失，so that 管理畫面不被歷史殘骸淹沒。
+13. As a 系統管理員，I want Redis 或 backend 重啟後系統自動收斂回正常，so that 深夜故障不需人工介入。
 
 **維護者**
-14. As a 後端維護者, I want 每個變更以小而自足、獨立綠燈的 PR 交付, so that review 品質與速度可控。
-15. As a 後端維護者, I want 系統行為由核心不變量（INV1–5）定義且各有對應測試, so that 重構時能快速驗證正確性未被破壞。
+14. As a 後端維護者，I want 每個變更以小而自足、獨立綠燈的 PR 交付，so that review 品質與速度可控。
+15. As a 後端維護者，I want 系統行為由核心不變量（INV1–5）定義且各有對應測試，so that 重構時能快速驗證正確性未被破壞。
 
 ## 3. 決策摘要
 
@@ -71,7 +71,7 @@ Backend 沒有排程器、health check、stuck submission 偵測。
 | 租約 | Per-job lease；lease 過期 = orphan 唯一判準 | ADR-0002 |
 | 落地保護 | completing 狀態 + 落地不變量（無 je_pending） | ADR-0003 |
 | 身分 | 短暫身分 + TTL 回收 + 401 fail-fast | ADR-0004 |
-| Rejudge 併發 | current_job currency + runner 端 job_id keying | §9、§10 |
+| Rejudge 並行 | current_job currency + runner 端 job_id keying | §9、§10 |
 | Abort | 保留，依原因計數 | §7.5 |
 | 基底 | 手寫 Redis 結構 + Lua | ADR-0002 附帶 |
 | 交付 | Small CLs / dark-launch（keystone 切換） | §15 |
@@ -124,8 +124,8 @@ Review 與測試以此清單為地圖；每條不變量在 §9 狀態機各有�
 ### 7.1 `POST /runners/register`
 Body：`{"registration_token": "...", "name": "runner-ec2-1"}`。
 回 `201`：`{"runner_id", "token", "config": {"heartbeat_interval_sec": 15, "poll_interval_sec": 3, "max_concurrent_jobs": 8}}`；token 不對回 `401`。
-`registration_token` 與**啟動時載入**的部署設定 `RUNNER_REGISTRATION_TOKEN` 比對（ADR-0005）：未設定 ⇒ 註冊停用、一律 `401`（fail closed）；更換或撤銷這把共用密鑰需重啟 Back-End。個別 runner 的即時撤銷不在此列——刪 `token_hash` 即 `401`（ADR-0004）。
-Backend 動作：發 `rn_id`/`rk_token`（只存 SHA-256）、寫 meta（name、registered_at、ip）帶 7d TTL、`ZADD runners:registered <now> <rn_id>`；順手清 ZSET 中 score 老於 7 天**且 token_hash 已因 TTL 蒸發**的成員及其殘留 keys（TTL 是唯一使活身分失效的機制，GC 只收屍、不刪仍持有效鑰匙的身分——避免「掃描後、刪除前」撞上續期的 TOCTOU）。
+`registration_token` 與**啟動時載入**的部署設定 `RUNNER_REGISTRATION_TOKEN` 比對（ADR-0005）：未設定 ⇒ 註冊停用、一律 `401`（fail closed）；更換或撤銷這把共用金鑰需重啟 Back-End。個別 runner 的即時撤銷不在此列——刪 `token_hash` 即 `401`（ADR-0004）。
+Backend 動作：發 `rn_id`/`rk_token`（只存 SHA-256）、寫 meta（name、registered_at、ip）帶 7d TTL、`ZADD runners:registered <now> <rn_id>`；順手清 ZSET 中 score 老於 7 天、**且 token_hash 已因 TTL 蒸發**的成員及其殘留 keys（TTL 是唯一使活身分失效的機制，GC 只收屍、不刪仍持有效鑰匙的身分——避免「掃描後、刪除前」撞上續期的 TOCTOU）。
 
 ### 7.2 `POST /runners/<rn>/heartbeat`
 Body：`{"active_job_ids": ["jb_...", ...]}`。回 `204`。
@@ -148,14 +148,14 @@ Body：`{"tasks": [...]}`（shape 同現行 callback）。
 
 ### 7.5 `PUT /runners/<rn>/jobs/<jb>/abort`
 Body：`{"reason": "drain" | "prep_failed" | "rejected"}`。回 `202`；`409`/`404` 同上。
-語意：清 lease、推回 pending 隊尾。**`drain` 不計 attempts**（rolling restart 不得折損 job 壽命）；`prep_failed`/`rejected` 計入（poison 收斂路徑，INV5）。計數後達上限 → 標 JE（走 INV1 流程）。
+語意：清 lease、推回 pending 佇列尾端。**`drain` 不計 attempts**（rolling restart 不得折損 job 壽命）；`prep_failed`/`rejected` 計入（poison 收斂路徑，INV5）。計數後達上限 → 標 JE（走 INV1 流程）。
 因 claim 每次皆計數（§13），「drain 不計」的實作為**退款**：drain requeue 時退還該次 claim 的計數（下限 0），使 claim+drain 一來一回淨額為零——否則每輪 drain→requeue→重新 claim 仍會侵蝕重試預算。poison 收斂路徑不受影響。
 
 ### 7.6 `GET /runners`（admin-only，`@login_required` + admin 權限）
 列出 ZSET 成員：`[{"runner_id", "name", "last_seen", "alive", "active_jobs": [...]}]`。資料來源為 backend 記帳（非自報）。
 
 ### Runner retry 規則
-complete/abort 除 `2xx`/`409`/`404` 外皆 retry（exponential backoff，上限 5 次）；耗盡後保留本地備份（`file_manager.backup_data`）並放棄——lease 過期後由 reclaim 重跑兜底。
+complete/abort 除 `2xx`/`409`/`404` 外皆 retry（exponential backoff，上限 5 次）；耗盡後保留本地備份（`file_manager.backup_data`）並放棄——lease 過期後由 reclaim 重跑收尾。
 
 ## 8. Redis Schema
 
@@ -214,13 +214,13 @@ SIGTERM（drain）：停止 poll → 未開始的 job abort(reason=drain) → �
 
 **模組佈局**：新協調層放 `runner/`（client.py、registration.py、heartbeat.py、poller.py、result_sender.py、active_jobs.py、config.py）；既有容器執行層（現 `runner/submission.py`、`runner/sandbox.py`）改名 `executor/`。
 
-**job_id keying（關鍵改動）**：工作目錄、容器命名、dispatcher 內部字典（result/compile_results/submission_ids）全部以 `job_id` 為 key。同 submission 的多個 job 是**合法並行狀態**（rejudge 撞窗口時發生，見 §12），`DuplicatedSubmissionIdError` 防線與 `prepare_submission_dir` 的 FileExistsError 特判整組刪除。但 job_id 對「同一 job 的兩次 claim」**不是**唯一鍵：abort/reclaim 後 backend 重新入列，同一 runner 可能以同一 job_id 再次 claim，而第一次 attempt 的 worker、queue entry 可能都還在（keystone 定案）。因此每次 `handle()` 建立一個具名 **`JobContext`**（meta、case 結果、compile 結果、started 旗標、submission_id 全部住在上面），其 instance identity 即 generation token：queue entry 在入列時綁定它、dequeue 時驗證，worker 在 spawn 時攜帶、寫回前在 `state_lock` 內驗證——過期（released 或被 supersede）一律丟棄，舊 attempt 的任何狀態都到不了新 attempt；per-job lock 與 compile_results／started／submission_ids 等按 job_id 的平行字典（漏綁的來源）全部併入 context。同 job_id 在 dispatcher 內尚存時再次 `handle()` 即 **supersede**：舊 generation 從此不可能產生 outcome，`handle()` 以回傳值告知，poller 據此歸還舊 claim 的 tracker 計數。**tracker 為 per-claim refcount 而非 job_id set**：add／remove 各對應一次 claim 的取得與了結（sender 回報完成，或 supersede 歸還），`len` 計 claim 數供容量閘與 drain 回報尾段使用，`snapshot` 去重為 job_id 供 heartbeat 續租——set 語意會讓第一代 outcome 的 remove 連帶消掉仍在跑的第二代（停租、提早釋放容量、尾段誤判回報完成）。
+**job_id keying（關鍵改動）**：工作目錄、容器命名、dispatcher 內部字典（result/compile_results/submission_ids）全部以 `job_id` 為 key。同 submission 的多個 job 是**合法並行狀態**（rejudge 撞上進行中 job 時發生，見 §12），`DuplicatedSubmissionIdError` 防線與 `prepare_submission_dir` 的 FileExistsError 特判整組刪除。但 job_id 對「同一 job 的兩次 claim」**不是**唯一鍵：abort/reclaim 後 backend 重新入列，同一 runner 可能以同一 job_id 再次 claim，而第一次 attempt 的 worker、queue entry 可能都還在（keystone 定案）。因此每次 `handle()` 建立一個具名 **`JobContext`**（meta、case 結果、compile 結果、started 旗標、submission_id 全部住在上面），其 instance identity 即 generation token：queue entry 在入列時綁定它、dequeue 時驗證，worker 在 spawn 時攜帶、寫回前在 `state_lock` 內驗證——過期（released 或被 supersede）一律丟棄，舊 attempt 的任何狀態都到不了新 attempt；per-job lock 與 compile_results／started／submission_ids 等依 job_id 的平行字典（漏綁的來源），全部併入 context。同 job_id 在 dispatcher 內尚存時再次 `handle()` 即 **supersede**：舊 generation 從此不可能產生 outcome，`handle()` 以回傳值告知，poller 據此歸還舊 claim 的 tracker 計數。**tracker 為 per-claim refcount 而非 job_id set**：add／remove 各對應一次 claim 的取得與了結（sender 回報完成，或 supersede 歸還），`len` 計 claim 數供容量閘與 drain 回報尾段使用，`snapshot` 只回不重複的 job_id 供 heartbeat 續租——若用 set 語意，第一代 outcome 的 remove 會連帶消掉仍在跑的第二代（停租、提早釋放容量、尾段誤判回報完成）。
 
-**容量定義（keystone 定案）**：「有容量」只看 job 維度——`len(tracker) < max_concurrent_jobs`。task 維度不設獨立上限：dispatcher 的 task queue 改為無上限，poller 是唯一 producer，task 總量天然被 job 閘 × 每 job case 數封頂。這使 `handle()` 原子化免費成立（驗證全在狀態寫入之前、入列不可能失敗），「claim 了卻塞不進去、白燒 attempts」整條路徑消失——slot-aware gate 關不死這條路，因為 claim 之前不可能知道下一個 job 的 case 數。同時刪除 dispatcher 層 300s job timeout：它只會悄悄丟棄 queued task、job 永不完成，pull 模式下等同 heartbeat 無限續租的永久卡死；per-case 上限由 executor 層兜底（compile 20s、執行 docker wait 5×time_limit → JE），executor 沒包到的例外（如 docker APIError）由 dispatcher 以 JE 收斂，保證 in-flight job 必然跑完。
+**容量定義（keystone 定案）**：「有容量」只看 job 維度——`len(tracker) < max_concurrent_jobs`。task 維度不設獨立上限：dispatcher 的 task queue 改為無上限，poller 是唯一 producer，task 總量天然被 job 閘 × 每 job case 數封頂。這使 `handle()` 原子化免費成立（驗證全在狀態寫入之前、入列不可能失敗），「claim 了卻塞不進去、白燒 attempts」整條路徑消失——slot-aware gate 關不死這條路，因為 claim 之前不可能知道下一個 job 的 case 數。同時刪除 dispatcher 層 300s job timeout：它只會悄悄丟棄 queued task、job 永不完成，pull 模式下等同 heartbeat 無限續租的永久卡死；per-case 上限由 executor 層守住（compile 20s、執行 docker wait 5×time_limit → JE），executor 沒包到的例外（如 docker APIError）由 dispatcher 以 JE 收斂，保證 in-flight job 必然跑完。
 
-**drain 期間 dispatcher 不得開始新工作（keystone 定案）**：不變量是「drain 一開始就不准有任何 job 開始判題」，因此 drain 的第一個動作就是 **`dispatcher.stop_accepting()`（latch）**，連停 poller 都排在它後面；完整順序為 latch → `poller.stop()` → 等 poller 結束（有 share 上限，見下段） → 掃描未開始的 job → abort(drain)。latch 若晚一步（哪怕只晚在 `poller.stop()` 之後一行），poller 正卡在 prep 而該次 prep 剛好成功時就會 dispatch，run loop 得以在 `accepting` 仍為真時把它轉成 started，之後的掃描便放過它——變成 shutdown 之後才開工、退場時被丟棄、再靠 reclaim 補 attempts，正是 drain 要避免的折損。latch 作用在兩個地方：run loop 不再 start 未開始的 job，且 **`handle()` 在發布狀態的同一個 `state_lock` 臨界區內檢查 latch**，drain 開始後一律拒收（`DispatcherDrainingError`），poller 把拒收轉成 abort(drain) 退還。因此「單次掃描必然完整」是結構性質而非時序運氣：任何成功發布都發生在 latch 之前（掃描必看得到），latch 之後的 dispatch 根本不會發布——不需要 rescan，也不需要以 `is_alive()` 猜測 poller 是否還活著。已 in-flight 的 job 不受 latch 影響（剩餘 case 必須跑完，否則永不 complete）。
+**drain 期間 dispatcher 不得開始新工作（keystone 定案）**：不變量是「drain 一開始就不准有任何 job 開始判題」，因此 drain 的第一個動作就是 **`dispatcher.stop_accepting()`（latch）**，連停 poller 都排在它後面；完整順序為 latch → `poller.stop()` → 等 poller 結束（有 share 上限，見下段） → 掃描未開始的 job → abort(drain)。latch 若晚一步（就算只晚在 `poller.stop()` 之後一行），poller 正卡在 prep 而該次 prep 剛好成功時就會 dispatch，run loop 得以在 `accepting` 仍為真時把它轉成 started，之後的掃描便放過它——變成 shutdown 之後才開工、退場時被丟棄、再靠 reclaim 補 attempts，正是 drain 要避免的折損。latch 作用在兩個地方：run loop 不再 start 未開始的 job，且 **`handle()` 在發布狀態的同一個 `state_lock` 臨界區內檢查 latch**，drain 開始後一律拒收（`DispatcherDrainingError`），poller 把拒收轉成 abort(drain) 退還。因此「單次掃描必然完整」是結構性質而非時序運氣：任何成功發布都發生在 latch 之前（掃描必看得到），latch 之後的 dispatch 根本不會發布——不需要 rescan，也不需要以 `is_alive()` 猜測 poller 是否還活著。已 in-flight 的 job 不受 latch 影響（剩餘 case 必須跑完，否則永不 complete）。
 
-**drain 是 best-effort，有總預算（keystone 定案）**：`DRAIN_TIMEOUT_SEC=540`（壓在 `docker stop --time=600` 之下留餘裕），drain 的每一次 join 與等 in-flight 的迴圈共用同一個 deadline。理由：prep 與回報的 I/O 只能逐次請求設上限、無法設總時長上限（requests 的 read timeout 是每次 socket read，慢速滴送的回應可無限延長單一請求），無界等待等於把決定權交給 SIGKILL、連已收集的結果都一起丟掉。超出預算者記 error log 並留給 lease 過期 reclaim。預算**不是先到先得**——各步驟的價值不同：等 poller（未開始的 claim，退還成本為零，且最可能卡在無法設總上限的 I/O）設 share 上限；等 in-flight 與 dispatcher 的 join 都保留一段 reserve 給回報尾段，避免任何前面的步驟把「送出已算好的結果」的時間擠掉。sender 停止前有**回報尾段**：等 poller 執行緒退出**且** tracker 清空（tracker 只在 sender 把 outcome 完整回報後移除，清空即所有已知 claim 都已回報），或總預算耗盡。卡死的 poller 因此會把 sender 撐到 deadline——它仍可能醒來補一筆 abort(drain)，提早停 sender 等於把這筆回報丟掉；等 in-flight 超時被放棄的 job 若在尾段內跑完，結果也仍會送出而不是留給 lease 過期。**已知極限**：540s 在最壞情況下不保證夠用（8 個並行 job × 多測資、或 sender 對著掛掉的 backend 重試，各自紙上估算都可能超過）。超出不破壞任何不變量（job 仍在 Redis，lease 過期後 reclaim），但當下沒送出的 complete／abort(drain) 會一起消失，該 submission 改走 reclaim 計數，§7.5 的 attempt-neutral 性質就對它失效；in-flight container 也會留下孤兒待人工回收。實際調校（含 `stop_grace_period`）屬部署層，見 #71。另兩條相關不變量：poller 停止後仍在 prep 的 claim 一律以 `abort(reason=drain)` 退還（**不可**記 prep_failed，否則 rolling restart 會把健康 submission 推向 JE）；prep 路徑上的每個外部呼叫都必須有 timeout（testdata HTTP、redis lock 的 blocking_timeout、redis socket timeout），否則 poller 的 stop 無法在一次 attempt 內生效。
+**drain 是 best-effort，有總預算（keystone 定案）**：`DRAIN_TIMEOUT_SEC=540`（壓在 `docker stop --time=600` 之下留餘裕），drain 的每一次 join、以及等 in-flight 的迴圈，共用同一個 deadline。理由：prep 與回報的 I/O 只能逐次請求設上限、無法設總時長上限（requests 的 read timeout 是每次 socket read，慢速滴送的回應可無限延長單一請求），無界等待等於把決定權交給 SIGKILL、連已收集的結果都一起丟掉。超出預算者記 error log 並留給 lease 過期 reclaim。預算**不是先到先得**——各步驟的價值不同：等 poller（未開始的 claim，退還成本為零，且最可能卡在無法設總上限的 I/O）設 share 上限；等 in-flight 與 dispatcher 的 join 都保留一段 reserve 給回報尾段，避免前面任何一步擠掉「送出已算好的結果」的時間。sender 停止前有**回報尾段**：等 poller 執行緒退出**且** tracker 清空（tracker 只在 sender 把 outcome 完整回報後移除，清空即所有已知 claim 都已回報），或總預算耗盡。卡死的 poller 因此會把 sender 撐到 deadline——它仍可能醒來補一筆 abort(drain)，提早停 sender 等於把這筆回報丟掉；等 in-flight 超時被放棄的 job 若在尾段內跑完，結果也仍會送出而不是留給 lease 過期。**已知極限**：540s 在最壞情況下不保證夠用（8 個並行 job × 多測資、或 sender 對著掛掉的 backend 重試，各自紙上估算都可能超過）。超出不破壞任何不變量（job 仍在 Redis，lease 過期後 reclaim），但當下沒送出的 complete／abort(drain) 會一起消失，該 submission 改走 reclaim 計數，§7.5 的 attempt-neutral 性質就對它失效；in-flight container 也會留下孤兒待人工回收。實際調校（含 `stop_grace_period`）屬部署層，見 #71。另兩條相關不變量：poller 停止後仍在 prep 的 claim 一律以 `abort(reason=drain)` 退還（**不可**記 prep_failed，否則 rolling restart 會把健康 submission 推向 JE）；prep 路徑上的每個外部呼叫都必須有 timeout（testdata HTTP、redis lock 的 blocking_timeout、redis socket timeout），否則 poller 的 stop 無法在一次 attempt 內生效。
 
 環境變數：`BACKEND_URL`（統一命名，`BACKEND_API` 刪除）、`RUNNER_REGISTRATION_TOKEN`、`RUNNER_NAME`（選填，log/admin 顯示用穩定名）、`MAX_CONTAINER_NUMBER` 等沿用。`SANDBOX_TOKEN` 的 push 路徑用途隨 app.py 刪除；testdata 通道（`/problem/<id>/meta|testdata|checksum ?token=`）仍以它驗證，退場需與 backend keystone 對那三個 endpoints 的 re-auth 一併定案（backend keystone 刪 `mongo/sandbox.py` 時該通道的驗證即失去依附，缺口已記錄於 #66）。
 
@@ -282,7 +282,7 @@ model/schemas/runner.py、model/utils/runner_auth.py
 ## 15. 交付計畫（G5 的落實）
 
 ### 15.1 原則
-Small CLs / dark-launch（Keystone Interface + Parallel Change）：新碼以多個 100–400 行小 PR 登陸 main 但無人呼叫；keystone PR 完成切換並刪除舊路徑；部署仍一次到位。**完全重寫**——舊 branch `feat/pull-based-job-dispatch` 僅作為文件輸入，不搬碼，重寫完成後廢棄。
+Small CLs / dark-launch（Keystone Interface + Parallel Change）：新程式碼拆成多個 100–400 行的小 PR 合入 main，但無人呼叫；keystone PR 完成切換並刪除舊路徑；部署仍一次到位。**完全重寫**——舊 branch `feat/pull-based-job-dispatch` 僅作為文件輸入，不搬程式碼，重寫完成後廢棄。
 
 ### 15.2 PR 切片（每片含測試、獨立綠燈）
 **Back-End**
@@ -317,8 +317,8 @@ Small CLs / dark-launch（Keystone Interface + Parallel Change）：新碼以多
 
 ## 17. 待驗證項（實作前確認）
 
-1. **Runner testdata 快取失效**：rejudge 常因測資更新而發；`ensure_testdata` 的快取必須能感知測資變更，否則 rejudge 拿舊測資判題（既有系統就存在的隱患，重作時驗證並修復）。
-2. **`process_result` 重算容忍性**：reclaim 重跑意味著同一 submission 的 `process_result`（含 `finish_judging` 的作業成績/統計更新）可能執行多次，須驗證為冪等或修正（ADR-0003 Consequences）。
+1. **Runner testdata 快取失效**：rejudge 常因測資更新而發；`ensure_testdata` 的快取必須能感知測資變更，否則 rejudge 拿舊測資判題（既有系統就存在的隱憂，重作時驗證並修復）。
+2. **`process_result` 重算容忍性**：reclaim 重跑代表同一 submission 的 `process_result`（含 `finish_judging` 的作業成績/統計更新）可能執行多次，須驗證為冪等或修正（ADR-0003 Consequences）。
 
 ## 18. v2 停車場
 
