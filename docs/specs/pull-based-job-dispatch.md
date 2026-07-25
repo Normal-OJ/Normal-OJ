@@ -255,7 +255,7 @@ model/schemas/runner.py、model/utils/runner_auth.py
 | Rejudge 撞進行中 job | currency 檢查 | 舊結果丟棄 + log；同 runner 並行合法（job_id keying） | 無感 |
 | 死而復生 runner 送舊結果 | ownership → 409 / currency → 204+log | runner drop | 新結果為準 |
 | Rolling restart 機隊 | drain abort 不計 attempts | 立即重派 | Pending 秒級 |
-| Runner zombie（行程活、追蹤器騙人） | **不偵測**（N3） | executor 300s timeout 兜底 | 最差 ~5 分鐘 JE |
+| Runner zombie（行程活、追蹤器騙人） | **不偵測**（N3） | executor per-case timeout（compile 20s、docker wait 5×time_limit）＋ dispatcher JE fallback → job 必然完成回報 | 分鐘級後收到 JE（隨 time_limit 與 case 數） |
 
 ## 13. 參數
 
